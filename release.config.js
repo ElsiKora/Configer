@@ -46,7 +46,7 @@ const config = {
       },
     ],
   ],
-  repositoryUrl: 'https://github.com/ElsiKora/Bean',
+  repositoryUrl: 'https://github.com/ElsiKora/Configer',
 };
 
 const isPrereleaseBranch = config.branches.some(
