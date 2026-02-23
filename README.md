@@ -21,6 +21,7 @@
 - 🏗️ Clean Architecture internals with full DI container, making every component testable, replaceable, and independently extensible
 
 ## 📚 Table of Contents
+
 - [Description](#-description)
 - [Tech Stack](#-tech-stack)
 - [Features](#-features)
@@ -35,6 +36,7 @@
 - [Acknowledgments](#-acknowledgments)
 
 ## 📖 Description
+
 Configer is a **typed, extensible configuration loader** for Node.js that resolves config files across project, workspace, and global scopes — with deterministic search plans, config inheritance chains, environment overlays, schema validation, and plugin lifecycle hooks.
 
 Built with **clean architecture** principles (domain → application → infrastructure → presentation layers) and powered by a dependency injection container, Configer delivers the flexibility of cosmiconfig with stronger type safety, explicit error codes, and a modular internal design.
@@ -49,30 +51,31 @@ Built with **clean architecture** principles (domain → application → infrast
 
 ## 🛠️ Tech Stack
 
-| Category | Technologies |
-|----------|-------------|
-| **Language** | TypeScript |
-| **Runtime** | Node.js >= 20.0.0 |
-| **Build Tool** | Rollup, TypeScript Compiler |
-| **Testing** | Vitest, V8 Coverage |
-| **Linting** | ESLint, Prettier |
-| **Package Manager** | npm |
-| **CI/CD** | Semantic Release, Husky, Commitlint |
-| **Dependencies** | yaml, smol-toml, json5, jsonc-parser, dotenv, @elsikora/cladi |
+| Category            | Technologies                                                  |
+| ------------------- | ------------------------------------------------------------- |
+| **Language**        | TypeScript                                                    |
+| **Runtime**         | Node.js >= 20.0.0                                             |
+| **Build Tool**      | Rollup, TypeScript Compiler                                   |
+| **Testing**         | Vitest, V8 Coverage                                           |
+| **Linting**         | ESLint, Prettier                                              |
+| **Package Manager** | npm                                                           |
+| **CI/CD**           | Semantic Release, Husky, Commitlint                           |
+| **Dependencies**    | yaml, smol-toml, json5, jsonc-parser, dotenv, @elsikora/cladi |
 
 ## 🚀 Features
-- ✨ ****Async & Sync Clients** — `createConfiger()` for async IO with watch support; `createConfigerSync()` for synchronous-only flows with strict fail-fast guarantees**
-- ✨ ****10+ Built-in Loaders** — JSON, JSON5, JSONC, YAML, TOML, .env, JS (.js/.cjs/.mjs), TypeScript (.ts/.cts/.mts), and package.json property extraction**
-- ✨ ****4 Search Strategies** — `none` (current directory), `project` (up to package.json), `workspace` (up to monorepo root), `global` (including XDG config home)**
-- ✨ ****Config Inheritance** — Merge parent configs via `extends` or `$import` directives with circular reference detection and source chain tracking**
-- ✨ ****Environment Overlays** — `$development`, `$production`, or `$env` map blocks are deep-merged for the active environment and stripped from output**
-- ✨ ****Built-in Schema Validation** — Declare required fields, types, defaults, nested objects, array items, and custom validators without external dependencies**
-- ✨ ****Plugin Lifecycle Hooks** — `beforeFind`, `afterFind`, `beforeRead`, `afterRead`, and `onError` hooks for extending every stage of config resolution**
-- ✨ ****Custom Loaders** — Register async/sync loaders for any file extension (`.ini`, `.xml`, `.custom`) via the `loaders` option**
-- ✨ ****Watch Mode** — File system watcher with debounced refresh, automatic cache invalidation, and clean `IWatchHandle.close()` cleanup**
-- ✨ ****Caching Layer** — Separate find/read caches with granular `clearFindCache()`, `clearReadCache()`, and `clearCaches()` controls**
-- ✨ ****Stable Error Codes** — Every failure throws `ConfigError` with a machine-readable `CODE` and human-readable `SUGGESTIONS` array**
-- ✨ ****Clean Architecture** — Domain-driven layers (domain → application → infrastructure → presentation) with full DI container for testability**
+
+- ✨ \***\*Async & Sync Clients** — `createConfiger()` for async IO with watch support; `createConfigerSync()` for synchronous-only flows with strict fail-fast guarantees\*\*
+- ✨ \***\*10+ Built-in Loaders** — JSON, JSON5, JSONC, YAML, TOML, .env, JS (.js/.cjs/.mjs), TypeScript (.ts/.cts/.mts), and package.json property extraction\*\*
+- ✨ \***\*4 Search Strategies** — `none` (current directory), `project` (up to package.json), `workspace` (up to monorepo root), `global` (including XDG config home)\*\*
+- ✨ \***\*Config Inheritance** — Merge parent configs via `extends` or `$import` directives with circular reference detection and source chain tracking\*\*
+- ✨ \***\*Environment Overlays** — `$development`, `$production`, or `$env` map blocks are deep-merged for the active environment and stripped from output\*\*
+- ✨ \***\*Built-in Schema Validation** — Declare required fields, types, defaults, nested objects, array items, and custom validators without external dependencies\*\*
+- ✨ \***\*Plugin Lifecycle Hooks** — `beforeFind`, `afterFind`, `beforeRead`, `afterRead`, and `onError` hooks for extending every stage of config resolution\*\*
+- ✨ \***\*Custom Loaders** — Register async/sync loaders for any file extension (`.ini`, `.xml`, `.custom`) via the `loaders` option\*\*
+- ✨ \***\*Watch Mode** — File system watcher with debounced refresh, automatic cache invalidation, and clean `IWatchHandle.close()` cleanup\*\*
+- ✨ \***\*Caching Layer** — Separate find/read caches with granular `clearFindCache()`, `clearReadCache()`, and `clearCaches()` controls\*\*
+- ✨ \***\*Stable Error Codes** — Every failure throws `ConfigError` with a machine-readable `CODE` and human-readable `SUGGESTIONS` array\*\*
+- ✨ \***\*Clean Architecture** — Domain-driven layers (domain → application → infrastructure → presentation) with full DI container for testability\*\*
 
 ## 🏗 Architecture
 
@@ -273,6 +276,7 @@ Configer/
 - ESM-compatible project ("type": "module" in package.json)
 
 ## 🛠 Installation
+
 ```bash
 # Using npm
 npm install @elsikora/configer
@@ -294,6 +298,7 @@ console.log(typeof client.findConfig === 'function'); // true
 ```
 
 ## 💡 Usage
+
 ### Basic Async Usage
 
 ```ts
@@ -313,8 +318,8 @@ const client: IConfigClient<AppConfig> = createConfiger<AppConfig>({
 const result: IConfigResult<AppConfig> | null = await client.findConfig();
 
 if (result) {
-  console.log(result.filepath);              // /project/.my-apprc.json
-  console.log(result.config?.serviceName);    // "billing-api"
+  console.log(result.filepath); // /project/.my-apprc.json
+  console.log(result.config?.serviceName); // "billing-api"
 }
 ```
 
@@ -350,11 +355,13 @@ const client = createConfiger({ moduleName: 'app', searchStrategy: 'global' });
 ### Config Inheritance
 
 Create a base config (`base.config.json`):
+
 ```json
 { "logLevel": "info", "retries": 1 }
 ```
 
 Extend it in your app config (`.my-apprc.json`):
+
 ```json
 {
   "extends": "./base.config.json",
@@ -465,22 +472,22 @@ const client = createConfiger({
 <details>
 <summary>Click to expand</summary>
 
-| Task / Feature | Status |
-|---|---|
-| Core async/sync config client with search strategies | ✅ Done |
-| Built-in loaders for JSON, YAML, TOML, JSON5, JSONC, .env, JS/TS | ✅ Done |
-| Config inheritance via `extends` and `$import` with cycle detection | ✅ Done |
-| Environment overrides (`$env`, `$development`, `$production`) | ✅ Done |
-| Built-in schema validation with nested objects and arrays | ✅ Done |
-| Plugin lifecycle hooks (beforeFind, afterRead, onError) | ✅ Done |
-| Watch mode with debounced file system monitoring | ✅ Done |
-| Clean Architecture with full DI container | ✅ Done |
-| Comprehensive unit and e2e test suites | ✅ Done |
-| MDX documentation site with guides and API reference | ✅ Done |
-| Remote config source support (HTTP/S3) | 🚧 In Progress |
-| Config encryption/decryption plugin | 🚧 In Progress |
-| JSON Schema / Zod adapter for schema validation | 🚧 In Progress |
-| Config diff and migration tooling | 🚧 In Progress |
+| Task / Feature                                                      | Status         |
+| ------------------------------------------------------------------- | -------------- |
+| Core async/sync config client with search strategies                | ✅ Done        |
+| Built-in loaders for JSON, YAML, TOML, JSON5, JSONC, .env, JS/TS    | ✅ Done        |
+| Config inheritance via `extends` and `$import` with cycle detection | ✅ Done        |
+| Environment overrides (`$env`, `$development`, `$production`)       | ✅ Done        |
+| Built-in schema validation with nested objects and arrays           | ✅ Done        |
+| Plugin lifecycle hooks (beforeFind, afterRead, onError)             | ✅ Done        |
+| Watch mode with debounced file system monitoring                    | ✅ Done        |
+| Clean Architecture with full DI container                           | ✅ Done        |
+| Comprehensive unit and e2e test suites                              | ✅ Done        |
+| MDX documentation site with guides and API reference                | ✅ Done        |
+| Remote config source support (HTTP/S3)                              | 🚧 In Progress |
+| Config encryption/decryption plugin                                 | 🚧 In Progress |
+| JSON Schema / Zod adapter for schema validation                     | 🚧 In Progress |
+| Config diff and migration tooling                                   | 🚧 In Progress |
 
 </details>
 
@@ -527,9 +534,11 @@ All errors are instances of `ConfigError` with a stable `.CODE` property for pro
 </details>
 
 ## 🔒 License
+
 This project is licensed under **MIT**.
 
 ## 🙏 Acknowledgments
+
 - Inspired by [cosmiconfig](https://github.com/cosmiconfig/cosmiconfig) — the gold standard for config file discovery in the Node.js ecosystem
 - Built with [@elsikora/cladi](https://github.com/ElsiKora/cladi) — a lightweight dependency injection container
 - Parsing powered by [yaml](https://github.com/eemeli/yaml), [smol-toml](https://github.com/nicolo-ribaudo/smol-toml), [json5](https://github.com/json5/json5), [jsonc-parser](https://github.com/microsoft/node-jsonc-parser), and [dotenv](https://github.com/motdotla/dotenv)

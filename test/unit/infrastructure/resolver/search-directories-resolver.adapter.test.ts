@@ -2,6 +2,7 @@ import { mkdir, mkdtemp, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+import { ConfigError } from '@domain/error/config.error';
 import { SearchDirectoriesResolverAdapter } from '@infrastructure/resolver/resolve-search-directories.adapter';
 import { describe, expect, it } from 'vitest';
 
@@ -89,6 +90,64 @@ describe('SearchDirectoriesResolverAdapter', () => {
     expect(resolvedDirectories[ROOT_INDEX]).toBe(path.resolve(nestedDirectory));
   });
 
+  it('resolves workspace strategy using package.json workspaces marker', async () => {
+    const temporaryDirectory: string = await createTemporaryDirectory();
+    const workspaceRootDirectory: string = path.join(temporaryDirectory, 'workspace');
+    const appDirectory: string = path.join(workspaceRootDirectory, 'packages', 'app');
+    const nestedDirectory: string = path.join(appDirectory, 'src');
+
+    await mkdir(workspaceRootDirectory);
+    await mkdir(path.join(workspaceRootDirectory, 'packages'));
+    await mkdir(appDirectory);
+    await mkdir(nestedDirectory);
+    await writeFile(
+      path.join(workspaceRootDirectory, 'package.json'),
+      '{"workspaces":["packages/*"]}',
+    );
+
+    const resolverAdapter: SearchDirectoriesResolverAdapter =
+      new SearchDirectoriesResolverAdapter();
+    const stopDirectory: string | undefined = undefined;
+
+    const resolvedDirectories: Array<string> = resolverAdapter.execute(
+      nestedDirectory,
+      'workspace',
+      'app',
+      stopDirectory,
+    );
+
+    expect(resolvedDirectories).toContain(path.resolve(workspaceRootDirectory));
+    expect(resolvedDirectories[ROOT_INDEX]).toBe(path.resolve(nestedDirectory));
+  });
+
+  it('throws explicit error when workspace package manifest is malformed', async () => {
+    const temporaryDirectory: string = await createTemporaryDirectory();
+    const workspaceRootDirectory: string = path.join(temporaryDirectory, 'workspace');
+    const appDirectory: string = path.join(workspaceRootDirectory, 'packages', 'app');
+    const nestedDirectory: string = path.join(appDirectory, 'src');
+
+    await mkdir(workspaceRootDirectory);
+    await mkdir(path.join(workspaceRootDirectory, 'packages'));
+    await mkdir(appDirectory);
+    await mkdir(nestedDirectory);
+    await writeFile(path.join(workspaceRootDirectory, 'package.json'), '{"workspaces":');
+
+    const resolverAdapter: SearchDirectoriesResolverAdapter =
+      new SearchDirectoriesResolverAdapter();
+    const stopDirectory: string | undefined = undefined;
+
+    let capturedError: unknown;
+
+    try {
+      resolverAdapter.execute(nestedDirectory, 'workspace', 'app', stopDirectory);
+    } catch (error) {
+      capturedError = error;
+    }
+
+    expect(capturedError).toBeInstanceOf(ConfigError);
+    expect((capturedError as ConfigError).CODE).toBe('CONFIG_WORKSPACE_MANIFEST_PARSE_ERROR');
+  });
+
   it('resolves global strategy with global config directory', async () => {
     const temporaryDirectory: string = await createTemporaryDirectory();
     const xdgDirectory: string = path.join(temporaryDirectory, 'xdg');
@@ -119,6 +178,40 @@ describe('SearchDirectoriesResolverAdapter', () => {
       expect(resolvedDirectories).toContain(path.resolve(expectedGlobalDirectory));
     } finally {
       process.env.XDG_CONFIG_HOME = previousXdgConfigHome;
+    }
+  });
+
+  it('resolves global strategy with default home config when XDG is not defined', async () => {
+    const temporaryDirectory: string = await createTemporaryDirectory();
+    const startDirectory: string = path.join(temporaryDirectory, 'project', 'src');
+    const previousXdgConfigHome: string | undefined = process.env.XDG_CONFIG_HOME;
+
+    await mkdir(path.join(temporaryDirectory, 'project'));
+    await mkdir(startDirectory);
+
+    delete process.env.XDG_CONFIG_HOME;
+
+    try {
+      const resolverAdapter: SearchDirectoriesResolverAdapter =
+        new SearchDirectoriesResolverAdapter();
+      const expectedGlobalDirectory: string = path.join(os.homedir(), '.config', 'app');
+      const stopDirectory: string | undefined = undefined;
+
+      const resolvedDirectories: Array<string> = resolverAdapter.execute(
+        startDirectory,
+        'global',
+        'app',
+        stopDirectory,
+      );
+
+      expect(resolvedDirectories).toContain(path.resolve(startDirectory));
+      expect(resolvedDirectories).toContain(path.resolve(expectedGlobalDirectory));
+    } finally {
+      if (previousXdgConfigHome) {
+        process.env.XDG_CONFIG_HOME = previousXdgConfigHome;
+      } else {
+        delete process.env.XDG_CONFIG_HOME;
+      }
     }
   });
 });
