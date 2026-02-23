@@ -1,6 +1,6 @@
 {
   "name": "@elsikora/configer",
-  "version": "1.0.0-dev.1",
+  "version": "1.0.0",
   "description": "Production-grade config loader with cosmiconfig-level capabilities and a clean original API.",
   "keywords": [
     "config",
