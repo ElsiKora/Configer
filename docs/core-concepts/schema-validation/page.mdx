@@ -1,0 +1,47 @@
+# Schema Validation
+
+Schema validation is applied after inheritance/env resolution and before transform.
+
+## Descriptor Shape
+
+`ISchemaDescriptor<TEntity>`:
+
+- `type: 'object'`
+- `properties: Record<string, ISchemaField>`
+- `shouldAllowUnknownProperties?: boolean`
+
+`ISchemaField` supports:
+
+- `type`
+- `isRequired`
+- `defaultValue`
+- `validator`
+- `properties` (nested objects)
+- `items` (arrays)
+
+## Validation Output
+
+Result uses `ISchemaValidationResult<TEntity>`:
+
+- `isValid`
+- `issues`
+- `value`
+
+Issues contain:
+
+- `code`
+- `path`
+- `message`
+
+## Behavior
+
+- Required field checks
+- Primitive type checks
+- Nested object checks
+- Array item checks
+- Custom validator checks
+- Unknown property checks (optional strict mode)
+
+## Error Surface
+
+Schema validation failures throw `CONFIG_SCHEMA_VALIDATION_ERROR` with detailed issue summary.

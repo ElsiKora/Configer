@@ -1,0 +1,31 @@
+# Package JSON Property
+
+Configer can use `package.json` as config source and extract nested property paths.
+
+## Dot Path
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  packageProperty: 'config.myApp',
+  searchPlaces: ['package.json'],
+  shouldMergeSearchPlaces: false,
+});
+```
+
+## Path Array
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  packageProperty: ['config', 'myApp'],
+  searchPlaces: ['package.json'],
+  shouldMergeSearchPlaces: false,
+});
+```
+
+## Notes
+
+- Missing path returns `undefined` config value.
+- Invalid `package.json` throws `CONFIG_PACKAGE_PARSE_ERROR`.
+- Path is normalized internally before read.

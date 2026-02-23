@@ -1,0 +1,48 @@
+# Create Your First Client
+
+## Async Client (Recommended)
+
+```ts
+import { createConfiger, type IConfigClient } from '@elsikora/configer';
+
+type TAppConfig = {
+  isFeatureEnabled: boolean;
+  serviceName: string;
+};
+
+const client: IConfigClient<TAppConfig> = createConfiger<TAppConfig>({
+  cwd: process.cwd(),
+  moduleName: 'my-app',
+});
+```
+
+Use async client when your config chain can involve async loaders, async plugins, or dynamic imports.
+
+## Sync Client
+
+```ts
+import { createConfigerSync, type IConfigClientSync } from '@elsikora/configer';
+
+const syncClient: IConfigClientSync<{ serviceName: string }> = createConfigerSync({
+  cwd: process.cwd(),
+  moduleName: 'my-app',
+});
+```
+
+Use sync client only when your runtime requires synchronous behavior.
+
+## Minimal Options
+
+- `moduleName` (required)
+- `cwd` (optional; defaults to `process.cwd()`)
+
+Commonly added early:
+
+- `searchStrategy`
+- `searchPlaces`
+- `envName`
+- `withCache`
+
+## Next Step
+
+Continue to **Read Your First Config** for `findConfig` and `readConfig` workflows.

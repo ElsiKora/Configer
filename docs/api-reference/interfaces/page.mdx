@@ -1,0 +1,33 @@
+# Interfaces
+
+## Client Interfaces
+
+- `IConfigClient<TEntity>` - async contract with watch support.
+- `IConfigClientSync<TEntity>` - sync contract.
+
+## Config and Result Interfaces
+
+- `IConfigOptions<TEntity>` - client creation options.
+- `IConfigResult<TEntity>` - resolved payload + metadata.
+- `IConfigFunctionContext` - context for function-based config exports.
+
+## Loader Interfaces
+
+- `ILoaderContext`
+- `ILoaderRegistryEntry<TEntity>`
+
+## Plugin Interfaces
+
+- `IConfigPlugin<TEntity>`
+- `IPluginContext`
+
+## Schema Interfaces
+
+- `ISchemaDescriptor<TEntity>`
+- `ISchemaField`
+- `ISchemaValidationResult<TEntity>`
+- `ISchemaValidationIssue`
+
+## Watch Interface
+
+- `IWatchHandle`

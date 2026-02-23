@@ -1,0 +1,28 @@
+# Getting Started
+
+This section is split into focused pages so setup remains fast and predictable.
+
+## Learning Path
+
+1. **Installation** - add the package and verify runtime requirements.
+2. **Create Your First Client** - choose async or sync client with proper typing.
+3. **Read Your First Config** - use `findConfig` and `readConfig`.
+4. **Sync Mode Rules** - understand strict sync constraints and error behavior.
+
+## 30-Second Quickstart
+
+```ts
+import { createConfiger } from '@elsikora/configer';
+
+const client = createConfiger<{ serviceName: string }>({
+  moduleName: 'my-app',
+});
+
+const result = await client.findConfig();
+console.log(result?.config?.serviceName);
+```
+
+## Next Step
+
+After this section, move to **Core Concepts** to understand search resolution, inheritance,
+environment overlays, schema validation, and cache/watch internals.

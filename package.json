@@ -1,0 +1,111 @@
+{
+  "name": "@elsikora/configer",
+  "version": "0.1.0",
+  "description": "Production-grade config loader with cosmiconfig-level capabilities and a clean original API.",
+  "keywords": [
+    "config",
+    "configuration",
+    "loader",
+    "search"
+  ],
+  "license": "MIT",
+  "author": "ElsiKora",
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "branch": "npx @elsikora/git-branch-lint -b",
+    "prebuild": "npm run clean",
+    "build": "npm run prebuild && rollup -c",
+    "clean": "node ./scripts/clean.function.js",
+    "commit": "cz",
+    "docs:build": "echo \"Nextra build is configured externally\"",
+    "docs:dev": "echo \"Nextra dev is configured externally\"",
+    "docs:lint": "npm run validate:docs",
+    "docs:readme": "readme-generator generate",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "lint": "eslint ./ --max-warnings=0",
+    "lint:fix": "eslint --fix ./",
+    "lint:types": "tsc -p tsconfig.json --noEmit",
+    "prepare": "husky",
+    "release": "semantic-release",
+    "test": "npm run test:unit",
+    "test:all": "npm run test:unit && npm run test:e2e",
+    "test:e2e": "vitest run --config vitest.end-to-end.config.js",
+    "test:unit": "vitest run --config vitest.unit.config.js --coverage",
+    "test:watch": "vitest --config vitest.unit.config.js",
+    "typecheck": "npm run lint:types",
+    "validate:arch": "npm run lint",
+    "validate:docs": "node ./scripts/validate-documentation.function.js",
+    "validate:fast": "npm run lint && npm run typecheck && vitest run --config vitest.unit.config.js",
+    "validate:heavy": "npm run validate:pr && npm run validate:package",
+    "validate:package": "npm run build && publint && attw --pack . --profile esm-only && npm pack --dry-run",
+    "validate:pr": "npm run validate:style && npm run validate:types && npm run validate:test && npm run validate:docs",
+    "validate:style": "npm run lint && npm run format",
+    "validate:test": "npm run test",
+    "validate:types": "npm run typecheck"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@elsikora/commitizen-plugin-commitlint-ai"
+    }
+  },
+  "dependencies": {
+    "@elsikora/cladi": "^2.0.2",
+    "dotenv": "^17.3.1",
+    "json5": "^2.2.3",
+    "jsonc-parser": "^3.3.1",
+    "smol-toml": "^1.6.0",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@commitlint/cli": "^20.4.2",
+    "@commitlint/config-conventional": "^20.4.2",
+    "@commitlint/cz-commitlint": "^20.4.1",
+    "@elsikora/cladi-testing": "^1.0.2",
+    "@elsikora/commitizen-plugin-commitlint-ai": "^2.5.0",
+    "@elsikora/eslint-config": "^3.10.0",
+    "@elsikora/git-branch-lint": "^1.2.2",
+    "@elsikora/prlint": "^1.0.2",
+    "@elsikora/readme-generator": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^12.0.6",
+    "@semantic-release/npm": "^13.1.4",
+    "@semantic-release/release-notes-generator": "^14.1.0",
+    "@types/node": "^22.13.8",
+    "@vitest/coverage-v8": "^2.1.8",
+    "commitizen": "^4.3.1",
+    "eslint": "^9.39.3",
+    "eslint-plugin-n": "^17.24.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier": "^3.5.3",
+    "publint": "^0.3.6",
+    "rollup": "^4.34.8",
+    "rollup-plugin-dts": "^6.1.1",
+    "semantic-release": "^25.0.3",
+    "typescript": "^5.8.2",
+    "vitest": "^2.1.8"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

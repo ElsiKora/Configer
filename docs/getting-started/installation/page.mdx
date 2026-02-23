@@ -1,0 +1,37 @@
+# Installation
+
+## Package
+
+Install Configer from npm:
+
+```bash
+npm install @elsikora/configer
+```
+
+Alternative package managers:
+
+```bash
+pnpm add @elsikora/configer
+yarn add @elsikora/configer
+```
+
+## Runtime Requirements
+
+- Node.js `>= 20`
+- ESM-compatible TypeScript/JavaScript project
+
+## Verify Install
+
+```ts
+import { createConfiger } from '@elsikora/configer';
+
+const client = createConfiger({
+  moduleName: 'my-app',
+});
+
+console.log(typeof client.findConfig === 'function');
+```
+
+## Next Step
+
+Continue to **Create Your First Client** to configure async/sync clients with proper typing.

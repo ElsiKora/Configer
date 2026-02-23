@@ -1,0 +1,38 @@
+# Factories
+
+## `createConfiger(options)`
+
+Creates asynchronous client:
+
+```ts
+const client = createConfiger<TEntity>(options);
+```
+
+Main methods:
+
+- `findConfig(searchFrom?) => Promise<IConfigResult<TEntity> | null>`
+- `readConfig(filepath) => Promise<IConfigResult<TEntity>>`
+- `watchConfig(callback) => IWatchHandle`
+- `clearCaches()`
+- `clearFindCache()`
+- `clearReadCache()`
+
+## `createConfigerSync(options)`
+
+Creates synchronous client:
+
+```ts
+const client = createConfigerSync<TEntity>(options);
+```
+
+Main methods:
+
+- `findConfig(searchFrom?) => IConfigResult<TEntity> | null`
+- `readConfig(filepath) => IConfigResult<TEntity>`
+- `clearCaches()`
+- `clearFindCache()`
+- `clearReadCache()`
+
+## Shared Option Entry
+
+Both factories accept `IConfigOptions<TEntity>`.

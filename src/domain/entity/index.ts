@@ -1,0 +1,14 @@
+export type { IConfigClientSync } from '@domain/entity/config-client-sync.entity';
+export type { IConfigClient } from '@domain/entity/config-client.entity';
+export type { IConfigFunctionContext } from '@domain/entity/config-function-context.entity';
+export type { IConfigOptions } from '@domain/entity/config-options.entity';
+export type { IConfigResult } from '@domain/entity/config-result.entity';
+export type { ILoaderRegistryEntry } from '@domain/entity/loader-registry-entry.entity';
+export type { ILoaderContext } from '@domain/entity/loader.entity';
+export type { IPluginContext } from '@domain/entity/plugin-context.entity';
+export type { IConfigPlugin } from '@domain/entity/plugin.entity';
+export type { ISchemaField } from '@domain/entity/schema-field.entity';
+export type { ISchemaValidationIssue } from '@domain/entity/schema-validation-issue.entity';
+export type { ISchemaValidationResult } from '@domain/entity/schema-validation-result.entity';
+export type { ISchemaDescriptor } from '@domain/entity/schema.entity';
+export type { IWatchHandle } from '@domain/entity/watch-handle.entity';

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "paths": {
+      "@application/*": ["../src/application/*"],
+      "@domain/*": ["../src/domain/*"],
+      "@elsikora/configer": ["../src/index.ts"],
+      "@infrastructure/*": ["../src/infrastructure/*"],
+      "@presentation/*": ["../src/presentation/*"]
+    },
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ESNext"
+  },
+  "exclude": ["dist"],
+  "include": ["./**/*.ts"]
+}

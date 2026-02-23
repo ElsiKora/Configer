@@ -1,0 +1,37 @@
+# Caching and Watch
+
+## Cache Model
+
+Configer maintains two separate caches:
+
+- **Find cache** for `findConfig` results
+- **Read cache** for `readConfig` results
+
+## Cache Controls
+
+- `clearFindCache()` clears find cache only.
+- `clearReadCache()` clears read cache only.
+- `clearCaches()` clears both.
+
+## Watch Mode
+
+Available on async client via `watchConfig(callback)`.
+
+Behavior:
+
+- Builds candidate directories from current search plan.
+- Watches each existing candidate directory.
+- Debounces refresh events before reloading.
+- Returns `IWatchHandle` with `close()` cleanup method.
+
+Callback contract:
+
+```ts
+(error: Error | null, result: IConfigResult<TEntity> | null) => void
+```
+
+## Operational Guidance
+
+- Always call `close()` on shutdown.
+- Keep watch callbacks lightweight.
+- Use cache clear methods explicitly when external files are changed by other processes.

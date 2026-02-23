@@ -1,0 +1,34 @@
+# Watch Mode
+
+Use watch mode to react to config changes at runtime.
+
+## Basic Usage
+
+```ts
+const client = createConfiger<{ logLevel: string }>({
+  moduleName: 'my-app',
+});
+
+const watchHandle = client.watchConfig((error, result) => {
+  if (error) {
+    console.error(error.message);
+    return;
+  }
+
+  console.log('Config changed:', result?.config);
+});
+```
+
+## Cleanup
+
+```ts
+watchHandle.close();
+```
+
+Always close watchers on shutdown to avoid leaked file descriptors.
+
+## Runtime Notes
+
+- Watch mode is async-client only.
+- Refreshes are debounced internally.
+- Cache is cleared before reloading changed config.

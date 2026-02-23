@@ -1,0 +1,41 @@
+# Custom Loaders
+
+Add support for custom file extensions by registering loader entries.
+
+## Async and Sync Loader
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  searchPlaces: ['config.custom'],
+  shouldMergeSearchPlaces: false,
+  loaders: {
+    '.custom': {
+      asyncLoader: async (_filepath, content) => JSON.parse(content),
+      syncLoader: (_filepath, content) => JSON.parse(content),
+    },
+  },
+});
+```
+
+## Async-Only Loader
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  loaders: {
+    '.custom': {
+      asyncLoader: async (_filepath, content) => JSON.parse(content),
+    },
+  },
+});
+```
+
+If sync API tries to read this extension, Configer throws `CONFIG_SYNC_LOADER_MISSING`.
+
+## Loader Contract Reminder
+
+- `asyncLoader(filepath, content, context)`
+- `syncLoader(filepath, content, context)` (optional)
+
+Use `context.moduleName` and `context.packagePropertyPath` for advanced behavior.

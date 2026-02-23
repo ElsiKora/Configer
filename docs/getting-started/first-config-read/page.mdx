@@ -1,0 +1,47 @@
+# Read Your First Config
+
+## Example Config File
+
+```json
+{
+  "serviceName": "billing-api",
+  "isFeatureEnabled": true
+}
+```
+
+Save it as `.my-apprc.json` in your project root.
+
+## Resolve by Search Plan
+
+```ts
+const result = await client.findConfig();
+
+if (result) {
+  console.log(result.filepath);
+  console.log(result.config?.serviceName);
+}
+```
+
+`findConfig` follows strategy + places and returns `null` when no file is found.
+
+## Read Explicit Path
+
+```ts
+const explicitResult = await client.readConfig('./config/local.json');
+console.log(explicitResult.config);
+```
+
+`readConfig` expects a concrete path and throws on invalid loader/parse/schema flows.
+
+## Result Shape
+
+Typical result fields:
+
+- `filepath`
+- `config`
+- `sources` (when inheritance chain exists)
+- `isEmpty` (for empty files when allowed)
+
+## Next Step
+
+Continue to **Sync Mode Rules** for limitations and fail-fast behavior in sync APIs.

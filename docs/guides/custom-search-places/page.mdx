@@ -1,0 +1,31 @@
+# Custom Search Places
+
+Control exactly where Configer searches for config files.
+
+## Replace Defaults
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  searchPlaces: ['config/custom.json', '.myapprc.toml'],
+  shouldMergeSearchPlaces: false,
+});
+```
+
+This disables default places and uses only your list.
+
+## Merge with Defaults
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  searchPlaces: ['config/local.json'],
+  shouldMergeSearchPlaces: true,
+});
+```
+
+This appends custom places to built-in places.
+
+## Tip
+
+For strict production behavior, keep `shouldMergeSearchPlaces: false` and define explicit places.

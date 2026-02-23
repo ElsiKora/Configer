@@ -1,0 +1,29 @@
+# Sync Mode Rules
+
+Sync mode is strict by design and fails fast when async behavior leaks into synchronous execution.
+
+## What Works in Sync Mode
+
+- Sync loaders (`syncLoader`)
+- Sync plugin hook returns
+- Sync transform returns
+- Reading `.cjs`/CommonJS style modules
+
+## What Fails in Sync Mode
+
+- Async plugin hook returns (`Promise`)
+- Async transform return (`Promise`)
+- Async config factory return (`Promise`)
+- Unsupported sync file extensions (`.mjs`, `.mts`, `.ts`)
+
+## Typical Error Codes
+
+- `CONFIG_SYNC_LOADER_MISSING`
+- `CONFIG_SYNC_PLUGIN_HOOK_PROMISE`
+- `CONFIG_SYNC_FUNCTION_RETURNED_PROMISE`
+- `CONFIG_SYNC_TRANSFORM_RETURNED_PROMISE`
+- `CONFIG_SYNC_UNSUPPORTED_EXTENSION`
+
+## Rule of Thumb
+
+If your flow may require async at any point, use `createConfiger(...)` (async client).

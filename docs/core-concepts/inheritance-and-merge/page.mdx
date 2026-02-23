@@ -1,0 +1,32 @@
+# Inheritance and Merge
+
+Configer supports inheritance through `$import` and `extends`.
+
+## Supported Shapes
+
+- `extends: "./base.json"`
+- `extends: ["./base.json", "./defaults.json"]`
+- `$import: "./base.json"`
+- `$import: ["./base.json"]`
+
+## Merge Order
+
+1. Parent files are resolved first.
+2. Parent configs are merged in listed order.
+3. Child config is merged last.
+
+Child values override parent values on conflict.
+
+## Circular Protection
+
+Inheritance cycles are rejected with `CONFIG_INHERITANCE_CYCLE`.
+
+## Merge Semantics
+
+- Plain objects: deep merged.
+- Arrays: replaced (unless custom transform/plugin modifies behavior).
+- Non-object scalars: child value wins.
+
+## Source Tracking
+
+When inheritance is used, `IConfigResult.sources` includes resolved chain in merge order.

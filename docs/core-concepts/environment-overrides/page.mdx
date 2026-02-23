@@ -1,0 +1,52 @@
+# Environment Overrides
+
+Configer supports two environment override styles.
+
+## Direct Environment Blocks
+
+Use prefixed keys such as:
+
+- `$development`
+- `$test`
+- `$production`
+
+Example:
+
+```json
+{
+  "$development": {
+    "logLevel": "debug"
+  },
+  "$production": {
+    "logLevel": "warn"
+  }
+}
+```
+
+## Mapped Environment Blocks
+
+Use `$env` with dynamic keys:
+
+```json
+{
+  "$env": {
+    "development": { "apiUrl": "https://dev.example.com" },
+    "production": { "apiUrl": "https://api.example.com" }
+  }
+}
+```
+
+## Resolution Rules
+
+- `envName: false` disables env overrides.
+- Explicit `envName` is used first.
+- Otherwise, `NODE_ENV` is used when present.
+- Inactive env directives are removed from final output.
+
+## Validation Rules
+
+Invalid env structures fail fast:
+
+- `CONFIG_INVALID_ENVIRONMENT_OVERRIDE`
+- `CONFIG_INVALID_ENVIRONMENT_MAP`
+- `CONFIG_INVALID_ENVIRONMENT_MAP_ENTRY`

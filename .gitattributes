@@ -1,0 +1,2 @@
+# Keep local package metadata during merges.
+package.json merge=ours

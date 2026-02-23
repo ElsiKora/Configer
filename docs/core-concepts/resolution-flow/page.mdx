@@ -1,0 +1,33 @@
+# Resolution Flow
+
+Configer resolves configuration in deterministic steps.
+
+## Inputs
+
+Search plan is derived from:
+
+- `moduleName`
+- `searchStrategy`
+- `searchPlaces`
+- `searchFrom`
+- `stopDirectory`
+
+## Resolution Steps
+
+1. Resolve `searchStartDirectory`.
+2. Resolve effective strategy (`none`, `project`, `workspace`, `global`).
+3. Resolve directory candidates for that strategy.
+4. Resolve effective search places (default + custom or custom only).
+5. Build candidate filepaths from cartesian product of directories and places.
+6. Attempt reads in order until first valid match (`findConfig`) or explicit target (`readConfig`).
+
+## Strategy Behavior
+
+- `none`: current start directory only.
+- `project`: ascend until nearest project boundary.
+- `workspace`: ascend until workspace root marker.
+- `global`: project/workspace traversal plus global config directory.
+
+## Determinism
+
+For identical inputs, search order and output are stable.

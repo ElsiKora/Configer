@@ -1,0 +1,44 @@
+# Configer
+
+Configer is a typed configuration loader for Node.js projects. It resolves config files from
+project/workspace/global scopes, supports inheritance and environment overlays, and exposes both
+async and sync clients with the same API shape.
+
+## Why Configer
+
+- **Deterministic resolution**: config search is derived from explicit strategy and search places.
+- **Typed contracts**: client, plugin, loader, and schema contracts are exported as TypeScript types.
+- **Extensible runtime**: custom loaders, plugin hooks, transforms, and schema validation.
+- **Production behavior**: explicit error codes, fail-fast validation, cache controls, watch mode.
+
+## Supported Formats
+
+Built-in loaders and parser adapters support:
+
+- `.json`
+- `.json5`
+- `.jsonc`
+- `.toml`
+- `.yaml` / `.yml`
+- `.env`
+- JS/TS module configs (`.js`, `.cjs`, `.mjs`, `.ts`, `.cts`, `.mts`)
+- `package.json` (with optional nested `packageProperty` extraction)
+
+## What You Get
+
+- `createConfiger(options)` for async IO and async plugin/loaders.
+- `createConfigerSync(options)` for sync-only flows.
+- Consistent methods:
+  - `findConfig(searchFrom?)`
+  - `readConfig(filepath)`
+  - `clearCaches()`
+  - `clearFindCache()`
+  - `clearReadCache()`
+- Async client additionally supports `watchConfig(callback)`.
+
+## Documentation Map
+
+- **Getting Started**: first install, first client, first config read.
+- **Core Concepts**: search plan, inheritance merge order, env overlays, validation.
+- **Guides**: custom loaders, plugins, package property extraction, watch mode.
+- **API Reference**: exact contracts for options, clients, loaders, plugins, schema, and errors.

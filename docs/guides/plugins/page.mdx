@@ -1,0 +1,51 @@
+# Plugins
+
+Plugins provide lifecycle hooks around find/read flows.
+
+## Hook Surface
+
+- `beforeFind(context)`
+- `afterFind(result, context)`
+- `beforeRead(context)`
+- `afterRead(result, context)`
+- `onError(error, context)`
+
+## Basic Plugin Example
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  plugins: [
+    {
+      name: 'source-marker',
+      afterRead: (result) => ({
+        ...result,
+        config: {
+          ...result.config,
+          _loadedFrom: result.filepath,
+        },
+      }),
+    },
+  ],
+});
+```
+
+## Error Hook Example
+
+```ts
+const client = createConfiger({
+  moduleName: 'my-app',
+  plugins: [
+    {
+      name: 'error-observer',
+      onError: (error) => {
+        console.error('Config error:', error.message);
+      },
+    },
+  ],
+});
+```
+
+## Sync Rule
+
+In sync client mode, plugin hooks must not return promises.
