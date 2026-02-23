@@ -141,19 +141,51 @@ describe('Loader adapters', () => {
       },
     );
 
+    const nonObjectPathValue: unknown = packageLoaderAdapter.loadSync(
+      packageJsonFilepath,
+      '{"app":{"nested":1}}',
+      loaderContext,
+    );
+
+    const emptyPackageValue: unknown = packageLoaderAdapter.loadSync(
+      packageJsonFilepath,
+      '   ',
+      loaderContext,
+    );
+
     expect(parsedValue).toBe(VALUE_ONE);
     expect(missingValue).toBeUndefined();
+    expect(nonObjectPathValue).toBeUndefined();
+    expect(emptyPackageValue).toBeUndefined();
+  });
+
+  it('throws package parse error for invalid package json payload', async () => {
+    const temporaryDirectory: string = await createTemporaryDirectory();
+    const packageJsonFilepath: string = path.join(temporaryDirectory, 'package.json');
+    const packageLoaderAdapter: PackageJsonLoaderAdapter = new PackageJsonLoaderAdapter();
+
+    expectConfigErrorCodeSync((): unknown => {
+      return packageLoaderAdapter.loadSync(packageJsonFilepath, '{"app":', {
+        moduleName: 'app',
+        packagePropertyPath: ['app'],
+      });
+    }, 'CONFIG_PACKAGE_PARSE_ERROR');
   });
 
   it('resolves loader keys for package/env/no-extension files', () => {
     const loaderKeyResolverAdapter: LoaderKeyResolverAdapter = new LoaderKeyResolverAdapter();
     const packageKey: string = loaderKeyResolverAdapter.execute('/safe/project/package.json');
     const environmentKey: string = loaderKeyResolverAdapter.execute('/safe/project/.env.local');
+
+    const environmentExtensionKey: string = loaderKeyResolverAdapter.execute(
+      '/safe/project/config.env',
+    );
     const noExtensionKey: string = loaderKeyResolverAdapter.execute('/safe/project/config');
     const jsonKey: string = loaderKeyResolverAdapter.execute('/safe/project/config.json');
 
     expect(packageKey).toBe('package.json');
     expect(environmentKey).toBe('.env');
+    expect(environmentExtensionKey).toBe('.env');
     expect(noExtensionKey).toBe('noExt');
     expect(jsonKey).toBe('.json');
   });
@@ -232,9 +264,21 @@ describe('Loader adapters', () => {
       loaderContext,
     );
 
+    const json5EmptyValue: unknown = json5LoaderAdapter.loadSync(
+      '/safe/project/app.json5',
+      '   ',
+      loaderContext,
+    );
+
     const jsoncValue: unknown = await jsoncLoaderAdapter.loadAsync(
       '/safe/project/app.jsonc',
       '{ "value": 1 }',
+      loaderContext,
+    );
+
+    const jsoncEmptyValue: unknown = jsoncLoaderAdapter.loadSync(
+      '/safe/project/app.jsonc',
+      '   ',
       loaderContext,
     );
 
@@ -244,23 +288,39 @@ describe('Loader adapters', () => {
       loaderContext,
     );
 
+    const tomlEmptyValue: unknown = tomlLoaderAdapter.loadSync(
+      '/safe/project/app.toml',
+      '   ',
+      loaderContext,
+    );
+
     const yamlValue: unknown = await yamlLoaderAdapter.loadAsync(
       '/safe/project/app.yaml',
       'value: 1',
       loaderContext,
     );
 
+    const yamlEmptyValue: unknown = yamlLoaderAdapter.loadSync(
+      '/safe/project/app.yaml',
+      '   ',
+      loaderContext,
+    );
+
     expect(json5Value).toEqual({
       value: VALUE_ONE,
     });
+    expect(json5EmptyValue).toBeUndefined();
     expect(jsoncValue).toEqual({
       value: VALUE_ONE,
     });
+    expect(jsoncEmptyValue).toBeUndefined();
     expect(tomlValue).toEqual({
       value: VALUE_ONE,
     });
+    expect(tomlEmptyValue).toBeUndefined();
     expect(yamlValue).toEqual({
       value: VALUE_ONE,
     });
+    expect(yamlEmptyValue).toBeUndefined();
   });
 });

@@ -25,10 +25,14 @@ describe('Search plan resolver adapters', () => {
       ' app . nested . value ',
       'fallback',
     );
+    const normalizedFromEmptyArray: Array<string> = normalizerAdapter.execute([], 'fallback');
+    const normalizedFromBlankString: Array<string> = normalizerAdapter.execute(' . . ', 'fallback');
     const normalizedFromFallback: Array<string> = normalizerAdapter.execute(undefined, 'fallback');
 
     expect(normalizedFromArray).toEqual(['app', 'nested']);
     expect(normalizedFromString).toEqual(['app', 'nested', 'value']);
+    expect(normalizedFromEmptyArray).toEqual(['fallback']);
+    expect(normalizedFromBlankString).toEqual(['fallback']);
     expect(normalizedFromFallback).toEqual(['fallback']);
   });
 

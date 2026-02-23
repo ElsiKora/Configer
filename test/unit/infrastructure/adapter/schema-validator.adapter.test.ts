@@ -1,3 +1,4 @@
+import type { ISchemaValidationIssue } from '@domain/entity/schema-validation-issue.entity';
 import type { ISchemaValidationResult } from '@domain/entity/schema-validation-result.entity';
 import type { ISchemaDescriptor } from '@domain/entity/schema.entity';
 
@@ -187,5 +188,75 @@ describe('SchemaValidatorAdapter', () => {
 
     expect(result.isValid).toBe(false);
     expect(result.issues[0]?.code).toBe('SCHEMA_TYPE_MISMATCH');
+  });
+
+  it('supports boolean, null, unknown, optional undefined and object/array fallbacks', () => {
+    const schemaValidatorAdapter: SchemaValidatorAdapter = new SchemaValidatorAdapter();
+
+    const schema: ISchemaDescriptor<Record<string, unknown>> = {
+      properties: {
+        isEnabled: { type: 'boolean' },
+        maybeText: { type: 'string' },
+        metadata: { type: 'object' },
+        nullableValue: { type: 'null' },
+        rawValue: { type: 'unknown' },
+        tags: { type: 'array' },
+      },
+      type: 'object',
+    };
+
+    const result: ISchemaValidationResult<Record<string, unknown>> =
+      schemaValidatorAdapter.validate(
+        {
+          isEnabled: true,
+          metadata: { isNested: true },
+          nullableValue: null,
+          rawValue: { any: 'shape' },
+          tags: [VALUE_THREE, 'x'],
+        },
+        schema,
+      );
+
+    expect(result.isValid).toBe(true);
+    expect(result.value).toEqual({
+      isEnabled: true,
+      metadata: { isNested: true },
+      nullableValue: null,
+      rawValue: { any: 'shape' },
+      tags: [VALUE_THREE, 'x'],
+    });
+  });
+
+  it('reports string mismatch and custom validator false result', () => {
+    const schemaValidatorAdapter: SchemaValidatorAdapter = new SchemaValidatorAdapter();
+
+    const schema: ISchemaDescriptor<{ score: number; serviceName: string }> = {
+      properties: {
+        score: {
+          type: 'number',
+          validator: (): boolean => {
+            return false;
+          },
+        },
+        serviceName: { type: 'string' },
+      },
+      shouldAllowUnknownProperties: false,
+      type: 'object',
+    };
+
+    const result: ISchemaValidationResult<{ score: number; serviceName: string }> =
+      schemaValidatorAdapter.validate({ score: VALUE_THREE, serviceName: VALUE_THREE }, schema);
+
+    expect(result.isValid).toBe(false);
+    expect(
+      result.issues.some((issue: ISchemaValidationIssue): boolean => {
+        return issue.code === 'SCHEMA_TYPE_MISMATCH';
+      }),
+    ).toBe(true);
+    expect(
+      result.issues.some((issue: ISchemaValidationIssue): boolean => {
+        return issue.code === 'SCHEMA_CUSTOM_VALIDATION_FAILED';
+      }),
+    ).toBe(true);
   });
 });
