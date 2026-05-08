@@ -73,7 +73,7 @@
     "@arethetypeswrong/cli": "^0.18.2",
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
-    "@commitlint/cz-commitlint": "^20.4.1",
+    "@commitlint/cz-commitlint": "^21.0.0",
     "@elsikora/cladi-testing": "^1.0.2",
     "@elsikora/commitizen-plugin-commitlint-ai": "^2.5.0",
     "@elsikora/eslint-config": "^3.10.0",
